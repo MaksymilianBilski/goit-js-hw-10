@@ -1,60 +1,76 @@
 import { add, debounce } from 'lodash';
 import './css/styles.css';
+import { Notify } from '../node_modules/notiflix/build/notiflix-notify-aio';
 const debounce = require('lodash.debounce');
+
 const input = document.querySelector('input[type=text]');
-console.log(input);
+const list = document.querySelector('.country-list');
+const test = document.querySelector('.test');
+list.style.listStyle = 'none';
 
 const DEBOUNCE_DELAY = 300;
-const DATABASE =
-  'https://restcountries.com/v2/all?fields=name,capital,currencies';
-
 const DATABASE2 = 'https://restcountries.com/v3.1/name/';
 
-// fetch(DATABASE)
-//   .then(response => {
-//     return response.json();
-//   })
-//   .then(data => {
-//     // for (let i = 0; i < data.length; i++) {
-//     //   console.log(data[i].name);
-//     // }
-//     console.log(data);
-//   })
-//   .catch(data => {
-//     alert('failed to load the resources!');
-//   });
-
 function fetchCountries(name) {
+  name = input.value;
+  if (list.childNodes.length > 0) {
+    list.innerHTML = '';
+  }
   fetch(DATABASE2 + name)
     .then(response => {
       return response.json();
     })
     .then(data => {
-      let arrLang = [];
-      for (lang in data[0].languages) {
-        arrLang.push(lang);
+      if (data.length > 10) {
+        return Notify.failure(
+          'Too many matches found. Please enter a more specific name.'
+        );
       }
-      console.log(
-        data[0].name.official +
-          ', ' +
-          data[0].capital +
-          ', ' +
-          data[0].population +
-          ', ' +
-          data[0].flags.svg +
-          ', ' +
-          arrLang
-      );
+      if (data.lenght >= 2 || data.length <= 10) {
+        for (const country of data) {
+          let arrLang = [];
+          for (lang in country.languages) {
+            arrLang.push(lang);
+          }
+          list.insertAdjacentHTML(
+            'afterbegin',
+            `<li>
+            <img src="${country.flags.svg}" width="20" height="20"> 
+              ${country.name.common} 
+            </li>`
+          );
+        }
+      }
+      if (data.length === 1) {
+        list.innerHTML = '';
+        for (const country of data) {
+          let arrLang = [];
+          for (lang in country.languages) {
+            arrLang.push(lang);
+          }
+          list.insertAdjacentHTML(
+            'afterbegin',
+            `<li>
+            <div style="display: flex;"><img src="${country.flags.svg}" width="60" height="60"> 
+              <h1>${country.name.common} </h1></div>
+             <div style="display:flex;"><h2>Capital: </h2><p class="data-details" style="font-size: 21px; font-weight: 500; padding-top: 2px; padding-left: 12px;">${country.capital}</p></div>
+              <div style="display:flex;"><h2>Population: </h2><p class="data-details" style="font-size: 21px; font-weight: 500; padding-top: 2px; padding-left: 12px;">${country.population} </p></div>
+              <div style="display:flex;"><h2>Languages: </h2><p class="data-details" style="font-size: 21px; font-weight: 500; padding-top: 2px; padding-left: 12px;">${arrLang}</p></div>
+            </li>`
+          );
+        }
+      }
     })
     .catch(data => {
-      alert('failed to load the resources!');
+      if (input.value.length === 0) {
+        return;
+      } else alert('failed to load the resources!');
     });
 }
-fetchCountries('belgium');
 
 input.addEventListener(
-  'click',
+  'input',
   debounce(() => {
-    console.log('test debouncea');
-  }, 300)
+    fetchCountries();
+  }, DEBOUNCE_DELAY)
 );
