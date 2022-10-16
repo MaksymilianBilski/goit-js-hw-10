@@ -64,7 +64,8 @@ function fetchCountries(name) {
     .catch(data => {
       if (input.value.length === 0) {
         return;
-      } else alert('failed to load the resources!');
+      } else console.log(data);
+      alert('failed to load the resources!');
     });
 }
 
