@@ -5,7 +5,7 @@ const debounce = require('lodash.debounce');
 
 const input = document.querySelector('input[type=text]');
 const list = document.querySelector('.country-list');
-const test = document.querySelector('.test');
+
 list.style.listStyle = 'none';
 
 const DEBOUNCE_DELAY = 300;
@@ -35,7 +35,7 @@ function fetchCountries(name) {
           list.insertAdjacentHTML(
             'afterbegin',
             `<li>
-            <img src="${country.flags.svg}" width="20" height="20"> 
+           <img src="${country.flags.svg}" width="20" height="20"> 
               ${country.name.common} 
             </li>`
           );
@@ -74,3 +74,4 @@ input.addEventListener(
     fetchCountries();
   }, DEBOUNCE_DELAY)
 );
+
