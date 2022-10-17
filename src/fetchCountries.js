@@ -62,7 +62,7 @@ function fetchCountries(name) {
       }
     })
     .catch(data => {
-      return Notify.failure('failed');
+      return Notify.failure('failed to load the resources');
     });
 }
 export { fetchCountries };
