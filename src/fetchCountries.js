@@ -13,13 +13,16 @@ function fetchCountries(name) {
       return response.json();
     })
     .then(data => {
+      console.log(data.status);
+      console.log(data);
       if (data.length > 10) {
         return Notify.failure(
           'Too many matches found. Please enter a more specific name.'
         );
       } else if (input.value.length === 0) {
         return;
-      } else if (data.lenght >= 2 || data.length <= 10) {
+      }
+      if (data.lenght >= 2 || data.length <= 10) {
         for (const country of data) {
           let arrLang = [];
           for (lang in country.languages) {
@@ -33,7 +36,8 @@ function fetchCountries(name) {
             </li>`
           );
         }
-      } else if (data.length === 1) {
+      }
+      if (data.length === 1) {
         list.innerHTML = '';
         for (const country of data) {
           let arrLang = [];
@@ -51,12 +55,14 @@ function fetchCountries(name) {
             </li>`
           );
         }
-      } else if (data.textContent === undefined) {
+      }
+      if (data.status === 404) {
+        console.log(data);
         return Notify.failure('Oops, there is no country with that name');
       }
     })
     .catch(data => {
-      return Notify.failure('something goes wrong');
+      return Notify.failure('failed');
     });
 }
 export { fetchCountries };
