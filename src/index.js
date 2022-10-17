@@ -1,4 +1,4 @@
-import debounce from 'lodash';
+import { debounce } from 'lodash';
 import { Notify } from 'notiflix';
 import './css/styles.css';
 import { fetchCountries } from './fetchCountries';
@@ -10,11 +10,9 @@ const DEBOUNCE_DELAY = 300;
 function singleMarkup(data) {
   const langArr = [];
   const lang = Object.values(data[0].languages);
-  console.log(lang);
   for (let i = 0; i < lang.length; i++) {
     langArr.push(lang[i]);
   }
-  console.log(langArr);
   return countryInfo.insertAdjacentHTML(
     'afterbegin',
     `<li style="list-style: none;">
@@ -31,7 +29,7 @@ function multipleMarkup(data) {
   for (const item of data) {
     countryList.insertAdjacentHTML(
       'afterbegin',
-      `<li>
+      `<li style="list-style: none;">
             <img src="${item.flags.svg}" width="20" height="20">
               ${item.name.common}
           </li>`
@@ -46,7 +44,7 @@ function clearMarkup() {
 
 // function to search and make certain markups
 function fetch(e) {
-  const name = e.target.value;
+  const name = e.target.value.trim();
   clearMarkup();
   if (name.length === 0) {
     return Notify.failure('empty field!');
@@ -61,9 +59,10 @@ function fetch(e) {
         // adding single and multiple markups    vv
       } else if (data.length >= 2 && data.length < 10) {
         multipleMarkup(data);
-      }
-      if (data.length === 1) {
+      } else if (data.length === 1) {
         singleMarkup(data);
+      } else if (data.status === 404) {
+        Notify.failure('Oops, there is no country with that name');
       }
     })
     .catch(err => {
