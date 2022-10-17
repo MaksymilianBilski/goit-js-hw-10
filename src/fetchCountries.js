@@ -56,7 +56,7 @@ function fetchCountries(name) {
       }
     })
     .catch(data => {
-      console.log('some ting go wung!');
+      return Notify.failure('something goes wrong');
     });
 }
 export { fetchCountries };
