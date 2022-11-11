@@ -1,13 +1,15 @@
-const input = document.querySelector('input#search-box');
-const URL_COUNTRIES_API = 'https://restcountries.com/v3.1/name/';
+//1 METODA
 
-function fetchCountries(name) {
-  return fetch(
-    URL_COUNTRIES_API + name + `?fields=name,capital,population,flags,languages`
-  ).then(response => response.json());
-}
+// const input = document.querySelector('input#search-box');
+// const URL_COUNTRIES_API = 'https://restcountries.com/v3.1/name/';
 
-export { fetchCountries };
+// function fetchCountries(name) {
+//   return fetch(
+//     URL_COUNTRIES_API + name + `?fields=name,capital,population,flags,languages`
+//   ).then(response => response.json());
+// }
+
+// export { fetchCountries };
 
 // const input = document.querySelector('input[type=text]');
 // const list = document.querySelector('.country-list');
@@ -77,3 +79,15 @@ export { fetchCountries };
 //     });
 // }
 // export { fetchCountries };
+
+
+//2 metoda
+const URL = `https://restcountries.com/v3.1/name/`;
+
+function fetchCountries(name) {
+  return fetch(URL + name)
+    .then(response => response.json())
+    .catch(error => error.json());
+}
+
+export { fetchCountries };
