@@ -72,7 +72,7 @@
 
 // input.addEventListener('input', debounce(fetch, DEBOUNCE_DELAY));
 
-//3 metoda
+//2 metoda
 import { debounce } from 'lodash';
 import { Notify } from 'notiflix';
 import './css/styles.css';
